@@ -4,76 +4,15 @@
 
   const els = {
     stars: $("stars"),
-    counter: $("counter"),
-    clock: $("clock"),
-    conn: $("conn"),
-    mood: $("mood"),
-    quote: $("quote"),
-    meterFill: $("meterFill"),
-    marquee: $("marquee"),
   };
 
-  // --- Fake visitor counter (localStorage, feels authentic)
-  const COUNTER_KEY = "ksr_visitor_counter_v1";
-  function formatCounter(n) {
-    return String(n).padStart(6, "0");
-  }
-  function bumpCounter() {
-    const prev = Number(localStorage.getItem(COUNTER_KEY) || "0");
-    const next = Math.max(prev + 1, 1337 + (prev % 17)); // keep it fun
-    localStorage.setItem(COUNTER_KEY, String(next));
-    if (els.counter) els.counter.textContent = formatCounter(next);
-  }
-
-  // --- Clock
-  function tickClock() {
-    if (!els.clock) return;
-    const d = new Date();
-    const hh = String(d.getHours()).padStart(2, "0");
-    const mm = String(d.getMinutes()).padStart(2, "0");
-    const ss = String(d.getSeconds()).padStart(2, "0");
-    els.clock.textContent = `${hh}:${mm}:${ss}`;
-  }
-
-  // --- Quotes (minimal text, non-PC vibe)
-  const QUOTES = [
-    '"be kind"',
-    '"rewind"',
-    '"after dark"',
-    '"mix tape"',
-    '"roller rink"',
-    '"late-night tv"',
-    '"glitter & neon"',
-    '"summer forever"',
-    '"meet me at the mall"',
-  ];
-  function setRandomQuote() {
-    if (!els.quote) return;
-    const q = QUOTES[Math.floor(Math.random() * QUOTES.length)];
-    els.quote.textContent = q;
-  }
-
-  // conn element exists for aesthetics; keep it static (set in HTML)
-
-  // --- Meter animation
-  let meterTarget = 0;
-  let meterValue = 0;
-  function setMeterTarget(p) {
-    meterTarget = Math.max(0, Math.min(100, p));
-  }
-  function animateMeter() {
-    if (!els.meterFill) return;
-    meterValue += (meterTarget - meterValue) * 0.06;
-    els.meterFill.style.width = `${meterValue.toFixed(2)}%`;
-    requestAnimationFrame(animateMeter);
-  }
-
-  // --- Sparkle drift canvas (ambient)
-  function createSparkles(canvas) {
+  // --- Painted haze + spray glitter canvas (ambient)
+  function createPaint(canvas) {
     const ctx = canvas.getContext("2d", { alpha: true });
     let w = 0;
     let h = 0;
     let p = [];
+    let t = 0;
     let raf = 0;
 
     function resize() {
@@ -96,7 +35,39 @@
     }
 
     function draw() {
+      t += 1;
       ctx.clearRect(0, 0, w, h);
+
+      // Soft painted wash (changes slowly, makes everything feel blended)
+      const wob = Math.sin(t / 220);
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      grad.addColorStop(0, `rgba(255, 79, 216, ${0.05 + 0.02 * wob})`);
+      grad.addColorStop(0.5, `rgba(125, 255, 234, ${0.04 + 0.02 * (1 - wob)})`);
+      grad.addColorStop(1, `rgba(122, 167, 255, ${0.04 + 0.015 * wob})`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Occasional “spray smears”
+      if (t % 90 === 0) {
+        const cx = Math.random() * w;
+        const cy = Math.random() * h;
+        const rx = 120 + Math.random() * 260;
+        const ry = 40 + Math.random() * 140;
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate((-0.4 + Math.random() * 0.8));
+        const g = ctx.createRadialGradient(0, 0, 10, 0, 0, rx);
+        g.addColorStop(0, "rgba(255,255,255,0.06)");
+        g.addColorStop(0.35, "rgba(255,79,216,0.05)");
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.scale(1, ry / rx);
+        ctx.beginPath();
+        ctx.arc(0, 0, rx, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
       for (const s of p) {
         s.x += s.vx;
         s.y += s.vy;
@@ -132,37 +103,9 @@
       stop: () => cancelAnimationFrame(raf),
     };
   }
-  // mood element exists for aesthetics; keep it static (set in HTML)
 
-  // --- Marquee: restart to avoid sometimes “stuck at 0” on load
-  function nudgeMarquee() {
-    if (!els.marquee) return;
-    els.marquee.style.animation = "none";
-    // force reflow
-    void els.marquee.offsetHeight;
-    els.marquee.style.animation = "";
-  }
-
-  // --- Wire up (minimal / ambient only)
-  const sparkles = els.stars ? createSparkles(els.stars) : null;
-
-  // No click/keyboard handlers: keep it passive.
-
-  // Init sequence
-  bumpCounter();
-  tickClock();
-  setInterval(tickClock, 1000);
-  setRandomQuote();
-  setMeterTarget(65);
-  animateMeter();
-  nudgeMarquee();
-
-  // Gentle ambient updates
-  setTimeout(() => setMeterTarget(86), 900);
-  setInterval(() => {
-    setRandomQuote();
-    setMeterTarget(70 + Math.random() * 30);
-  }, 12000);
+  // --- Start (purely visual)
+  if (els.stars) createPaint(els.stars);
 })();
 
 
