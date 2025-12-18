@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="A tiny retro landing page with late-90s / Y2K vibes." />
+    <title>1999 Vibe Page</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="crt">
+      <canvas id="stars" class="stars" width="1" height="1" aria-hidden="true"></canvas>
+
+      <table class="page" role="presentation" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="gutter" aria-hidden="true"></td>
+          <td class="content">
+            <div class="window">
+              <div class="titlebar">
+                <span class="titlebar__title">CHANNEL 99 • AFTER DARK</span>
+                <span class="titlebar__buttons" aria-hidden="true">
+                  <span class="btn">_</span><span class="btn">▢</span><span class="btn">×</span>
+                </span>
+              </div>
+
+              <div class="inner">
+                <div class="banner">
+                  <div class="logo">
+                    <span class="logo__a">K</span><span class="logo__b">S</span><span class="logo__c">R</span>
+                  </div>
+                  <div class="tagline">
+                    <span class="blink">glitter loading</span>
+                    <span class="dot">•</span>
+                    <span id="clock" class="mono">--:--:--</span>
+                  </div>
+                </div>
+
+                <div class="marquee-wrap" aria-label="Scrolling status bar">
+                  <div class="marquee" id="marquee">
+                    <span class="pill">best viewed at 800×600</span>
+                    <span class="sep">::</span>
+                    <span class="pill">no sound, no signup</span>
+                    <span class="sep">::</span>
+                    <span class="pill">mall neon • glossy chrome • sparkles</span>
+                    <span class="sep">::</span>
+                    <span class="pill">you are visitor #<span id="counter">000000</span></span>
+                    <span class="sep">::</span>
+                    <span class="pill">nothing to click. just a vibe.</span>
+                  </div>
+                </div>
+
+                <div class="grid">
+                  <div class="panel panel--left">
+                    <div class="panel__title">STATUS</div>
+                    <div class="panel__body mono">
+                      <div class="row">
+                        <span class="label">hangout</span>
+                        <span id="conn" class="value">food court</span>
+                      </div>
+                      <div class="row">
+                        <span class="label">late-night</span>
+                        <span id="mood" class="value">tv glow</span>
+                      </div>
+                      <div class="row">
+                        <span class="label">mix</span>
+                        <span class="value">tape A-side</span>
+                      </div>
+                      <div class="row">
+                        <span class="label">note</span>
+                        <span id="quote" class="value">"be kind"</span>
+                      </div>
+                      <div class="meter" aria-hidden="true">
+                        <div class="meter__label">vibe level</div>
+                        <div class="meter__bar">
+                          <div id="meterFill" class="meter__fill"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="panel panel--right">
+                    <div class="panel__title">CUT-OUTS</div>
+                    <div class="panel__body">
+                      <div class="hero">
+                        <div class="hero__screen collage" role="img" aria-label="Y2K collage card">
+                          <div class="collage__top">
+                            <span class="sticker sticker--star">★</span>
+                            <span class="sticker sticker--heart">♥</span>
+                            <span class="sticker sticker--smile">:)</span>
+                          </div>
+                          <div class="collage__center">
+                            <div class="chrome">GLASSY</div>
+                            <div class="chrome chrome--alt">NEON</div>
+                            <div class="tiny">somewhere between a magazine ad and a skate-rink flyer</div>
+                          </div>
+                          <div class="collage__bottom mono dim">
+                            <span>99</span><span class="sep">::</span><span>y2k</span><span class="sep">::</span><span>glitter</span>
+                          </div>
+                        </div>
+                        <div class="badges" aria-hidden="true">
+                          <div class="badge badge--hot">HOT</div>
+                          <div class="badge badge--new">NEW</div>
+                          <div class="badge badge--wow">WOW</div>
+                        </div>
+                      </div>
+
+                      <div class="fineprint mono">
+                        <span class="dim">no cookies*</span>
+                        <span class="sep">|</span>
+                        <span class="dim">no signup</span>
+                        <span class="sep">|</span>
+                        <span class="dim">just a vibe</span>
+                      </div>
+                      <div class="footnote mono dim">*unless you count 🍪 in real life</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="footer mono">
+                  <span class="dim">© 1999–∞</span>
+                  <span class="sep">::</span>
+                  <span class="dim">under construction forever</span>
+                  <span class="sep">::</span>
+                  <span class="dim">made with HTML + CSS + JS</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="gutter" aria-hidden="true"></td>
+        </tr>
+      </table>
+    </div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+
