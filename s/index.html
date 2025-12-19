@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Teddy bear runner game" />
+    <title>teddy run | ksr</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <style>
+      body {
+        overflow: hidden;
+      }
+
+      .game-container {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #gameCanvas {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .game-ui {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        z-index: 10;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .back-link {
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        font-size: 13px;
+        letter-spacing: 1px;
+        padding: 8px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        transition: all 0.2s;
+      }
+
+      .back-link:hover {
+        color: rgba(255, 255, 255, 0.95);
+        border-color: rgba(125, 255, 234, 0.3);
+        box-shadow: 0 0 15px rgba(125, 255, 234, 0.15);
+      }
+
+      .score {
+        color: rgba(255, 255, 255, 0.9);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 18px;
+        font-weight: 700;
+        text-shadow:
+          0 0 10px rgba(125, 255, 234, 0.4),
+          0 0 20px rgba(255, 79, 216, 0.3);
+        padding: 8px 14px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+      }
+
+      .game-over {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 20;
+        text-align: center;
+        display: none;
+      }
+
+      .game-over.active {
+        display: block;
+      }
+
+      .game-over-box {
+        background:
+          radial-gradient(400px 200px at 30% 20%, rgba(255, 79, 216, 0.15), transparent 60%),
+          radial-gradient(400px 200px at 70% 40%, rgba(125, 255, 234, 0.12), transparent 60%),
+          rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow:
+          0 0 60px rgba(0, 0, 0, 0.8),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+      }
+
+      .game-over-title {
+        font-size: 32px;
+        font-weight: 900;
+        letter-spacing: 3px;
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow:
+          0 0 18px rgba(255, 79, 216, 0.35),
+          0 0 22px rgba(125, 255, 234, 0.25);
+        margin-bottom: 20px;
+        text-transform: lowercase;
+      }
+
+      .game-over-score {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 18px;
+        color: rgba(125, 255, 234, 0.92);
+        margin-bottom: 24px;
+        text-shadow: 0 0 12px rgba(125, 255, 234, 0.3);
+      }
+
+      .restart-btn {
+        padding: 12px 24px;
+        background:
+          linear-gradient(135deg, rgba(125, 255, 234, 0.25), rgba(255, 79, 216, 0.20)),
+          rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .restart-btn:hover {
+        background:
+          linear-gradient(135deg, rgba(125, 255, 234, 0.35), rgba(255, 79, 216, 0.28)),
+          rgba(0, 0, 0, 0.4);
+        box-shadow:
+          0 0 30px rgba(125, 255, 234, 0.25),
+          0 0 20px rgba(0, 0, 0, 0.4);
+        transform: translateY(-1px);
+      }
+
+      .instructions {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 10;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+        font-family: "Courier New", Courier, monospace;
+        text-align: center;
+        padding: 8px 16px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="crt">
+      <canvas id="stars" class="stars" width="1" height="1" aria-hidden="true"></canvas>
+
+      <div class="game-container">
+        <div class="game-ui">
+          <a href="../" class="back-link">←</a>
+          <div class="score" id="score">0</div>
+        </div>
+
+        <canvas id="gameCanvas"></canvas>
+
+        <div class="game-over" id="gameOver">
+          <div class="game-over-box">
+            <div class="game-over-title">game over</div>
+            <div class="game-over-score">Score: <span id="finalScore">0</span></div>
+            <button class="restart-btn" id="restartBtn">play again</button>
+          </div>
+        </div>
+
+        <div class="instructions" id="instructions">
+          Press SPACE or ↑ to jump
+        </div>
+      </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+      (function() {
+      // Game state
+      const canvas = document.getElementById("gameCanvas");
+      if (!canvas) {
+        console.error("Canvas element not found!");
+        return;
+      }
+      const ctx = canvas.getContext("2d");
+      if (!ctx) {
+        console.error("Could not get 2d context!");
+        return;
+      }
+      let gameState = "playing"; // playing, gameOver
+      let score = 0;
+      let gameSpeed = 4;
+      let frameCount = 0;
+
+      // Set canvas size
+      function resizeCanvas() {
+        const maxWidth = Math.min(1200, window.innerWidth - 40);
+        const maxHeight = Math.min(600, window.innerHeight - 40);
+        canvas.width = maxWidth;
+        canvas.height = maxHeight;
+        // Update ground position when resizing
+        if (ground.y > 0) {
+          ground.y = canvas.height - ground.height;
+          teddy.groundY = canvas.height - ground.height - teddy.height;
+          if (teddy.grounded) {
+            teddy.y = teddy.groundY;
+          }
+        }
+      }
+      window.addEventListener("resize", resizeCanvas);
+
+      // Teddy bear (player)
+      const teddy = {
+        x: 80,
+        y: 0,
+        width: 50,
+        height: 50,
+        velocityY: 0,
+        jumpPower: -12,
+        gravity: 0.6,
+        grounded: false,
+        groundY: 0,
+      };
+
+      // Ground
+      const ground = {
+        height: 40,
+        y: 0,
+      };
+
+      // Obstacles (stuffed animals)
+      const obstacles = [];
+      const obstacleTypes = [
+        { width: 40, height: 50, color: [125, 255, 234] }, // cyan bear
+        { width: 45, height: 45, color: [255, 79, 216] }, // pink bunny
+        { width: 35, height: 55, color: [122, 167, 255] }, // blue elephant
+        { width: 50, height: 40, color: [255, 230, 109] }, // yellow duck
+      ];
+
+      // Background elements (subtle animation)
+      const bgElements = [];
+
+      function initBgElements() {
+        bgElements.length = 0;
+        for (let i = 0; i < 8; i++) {
+          bgElements.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height * 0.6,
+            size: 20 + Math.random() * 30,
+            opacity: 0.05 + Math.random() * 0.08,
+            speed: 0.3 + Math.random() * 0.4,
+          });
+        }
+      }
+
+      // Initialize
+      function init() {
+        resizeCanvas();
+        teddy.groundY = canvas.height - ground.height - teddy.height;
+        teddy.y = teddy.groundY;
+        ground.y = canvas.height - ground.height;
+        obstacles.length = 0;
+        score = 0;
+        gameSpeed = 4;
+        frameCount = 0;
+        gameState = "playing";
+        initBgElements();
+        document.getElementById("gameOver").classList.remove("active");
+        document.getElementById("instructions").style.display = "block";
+      }
+
+      // Draw teddy bear
+      function drawTeddy() {
+        ctx.save();
+        ctx.translate(teddy.x + teddy.width / 2, teddy.y + teddy.height / 2);
+
+        // Body (brown/tan with neon glow)
+        ctx.fillStyle = `rgba(180, 140, 100, 0.9)`;
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "rgba(125, 255, 234, 0.4)";
+        ctx.beginPath();
+        ctx.ellipse(0, 5, teddy.width / 2.5, teddy.height / 2.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Head
+        ctx.beginPath();
+        ctx.arc(0, -teddy.height / 3, teddy.width / 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Ears
+        ctx.beginPath();
+        ctx.arc(-teddy.width / 4, -teddy.height / 2.5, teddy.width / 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(teddy.width / 4, -teddy.height / 2.5, teddy.width / 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Eyes (simple dots with glow)
+        ctx.fillStyle = "rgba(255, 79, 216, 0.9)";
+        ctx.shadowColor = "rgba(255, 79, 216, 0.6)";
+        ctx.beginPath();
+        ctx.arc(-teddy.width / 8, -teddy.height / 3.5, 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(teddy.width / 8, -teddy.height / 3.5, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Nose
+        ctx.fillStyle = "rgba(125, 255, 234, 0.9)";
+        ctx.shadowColor = "rgba(125, 255, 234, 0.6)";
+        ctx.beginPath();
+        ctx.arc(0, -teddy.height / 4, 2, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // Draw obstacle (stuffed animal)
+      function drawObstacle(obs) {
+        ctx.save();
+        ctx.translate(obs.x + obs.width / 2, obs.y + obs.height / 2);
+
+        const [colorR, colorG, colorB] = obs.color;
+        ctx.fillStyle = `rgba(${colorR}, ${colorG}, ${colorB}, 0.85)`;
+        ctx.shadowBlur = 12;
+        ctx.shadowColor = `rgba(${colorR}, ${colorG}, ${colorB}, 0.5)`;
+
+        // Simple rounded rectangle shape (stuffed animal body)
+        const cornerRadius = 8;
+        const x = -obs.width / 2;
+        const y = -obs.height / 2;
+        const w = obs.width;
+        const h = obs.height;
+        ctx.beginPath();
+        ctx.moveTo(x + cornerRadius, y);
+        ctx.lineTo(x + w - cornerRadius, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + cornerRadius);
+        ctx.lineTo(x + w, y + h - cornerRadius);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - cornerRadius, y + h);
+        ctx.lineTo(x + cornerRadius, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - cornerRadius);
+        ctx.lineTo(x, y + cornerRadius);
+        ctx.quadraticCurveTo(x, y, x + cornerRadius, y);
+        ctx.closePath();
+        ctx.fill();
+
+        // Add a simple face
+        ctx.fillStyle = `rgba(255, 255, 255, 0.9)`;
+        ctx.shadowBlur = 6;
+        ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
+        ctx.beginPath();
+        ctx.arc(0, -obs.height / 6, obs.width / 6, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.restore();
+      }
+
+      // Draw ground
+      function drawGround() {
+        // Ground line
+        ctx.strokeStyle = `rgba(125, 255, 234, 0.3)`;
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = "rgba(125, 255, 234, 0.2)";
+        ctx.beginPath();
+        ctx.moveTo(0, ground.y);
+        ctx.lineTo(canvas.width, ground.y);
+        ctx.stroke();
+
+        // Ground fill (subtle)
+        ctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
+        ctx.fillRect(0, ground.y, canvas.width, ground.height);
+      }
+
+      // Draw background (subtle animated elements)
+      function drawBackground() {
+        // Painted wash effect
+        const wob = Math.sin(frameCount / 180);
+        const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        grad.addColorStop(0, `rgba(255, 79, 216, ${0.03 + 0.01 * wob})`);
+        grad.addColorStop(0.5, `rgba(125, 255, 234, ${0.025 + 0.01 * (1 - wob)})`);
+        grad.addColorStop(1, `rgba(122, 167, 255, ${0.025 + 0.008 * wob})`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Floating elements (subtle)
+        bgElements.forEach((el) => {
+          el.x -= el.speed;
+          if (el.x + el.size < 0) {
+            el.x = canvas.width + el.size;
+            el.y = Math.random() * canvas.height * 0.6;
+          }
+
+          ctx.fillStyle = `rgba(255, 255, 255, ${el.opacity})`;
+          ctx.beginPath();
+          ctx.arc(el.x, el.y, el.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      // Update game
+      function update() {
+        if (gameState !== "playing") return;
+
+        frameCount++;
+        score = Math.floor(frameCount / 10);
+
+        // Increase speed gradually
+        gameSpeed = 4 + score / 200;
+
+        // Update teddy bear physics
+        teddy.velocityY += teddy.gravity;
+        teddy.y += teddy.velocityY;
+
+        // Ground collision
+        if (teddy.y >= teddy.groundY) {
+          teddy.y = teddy.groundY;
+          teddy.velocityY = 0;
+          teddy.grounded = true;
+        } else {
+          teddy.grounded = false;
+        }
+
+        // Spawn obstacles (first one at frame 60, then every 90-120 frames based on score)
+        const spawnInterval = Math.max(90, 150 - Math.floor(score / 30));
+        if (frameCount === 60 || (frameCount > 60 && (frameCount - 60) % spawnInterval === 0)) {
+          const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+          obstacles.push({
+            x: canvas.width,
+            y: teddy.groundY + teddy.height - type.height,
+            width: type.width,
+            height: type.height,
+            color: type.color,
+          });
+        }
+
+        // Update obstacles
+        obstacles.forEach((obs) => {
+          obs.x -= gameSpeed;
+        });
+
+        // Remove off-screen obstacles
+        while (obstacles.length > 0 && obstacles[0].x + obstacles[0].width < 0) {
+          obstacles.shift();
+        }
+
+        // Collision detection
+        obstacles.forEach((obs) => {
+          if (
+            teddy.x < obs.x + obs.width &&
+            teddy.x + teddy.width > obs.x &&
+            teddy.y < obs.y + obs.height &&
+            teddy.y + teddy.height > obs.y
+          ) {
+            gameOver();
+          }
+        });
+
+        // Update score display
+        document.getElementById("score").textContent = score;
+      }
+
+      // Jump
+      function jump() {
+        if (teddy.grounded && gameState === "playing") {
+          teddy.velocityY = teddy.jumpPower;
+          teddy.grounded = false;
+        }
+      }
+
+      // Game over
+      function gameOver() {
+        gameState = "gameOver";
+        document.getElementById("finalScore").textContent = score;
+        document.getElementById("gameOver").classList.add("active");
+        document.getElementById("instructions").style.display = "none";
+      }
+
+      // Restart
+      function restartGame() {
+        init();
+      }
+
+      // Expose restartGame globally for button click
+      window.restartGame = restartGame;
+
+      // Render
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        drawBackground();
+        drawGround();
+        drawTeddy();
+        obstacles.forEach(drawObstacle);
+      }
+
+      // Game loop
+      function gameLoop() {
+        update();
+        render();
+        requestAnimationFrame(gameLoop);
+      }
+
+      // Controls
+      document.addEventListener("keydown", (e) => {
+        if (e.code === "Space" || e.key === "ArrowUp") {
+          e.preventDefault();
+          if (gameState === "gameOver") {
+            restartGame();
+          } else {
+            jump();
+          }
+        }
+      });
+
+      // Touch controls
+      canvas.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        if (gameState === "gameOver") {
+          restartGame();
+        } else {
+          jump();
+        }
+      });
+
+      // Start game when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+          init();
+          gameLoop();
+        });
+      } else {
+        init();
+        gameLoop();
+      }
+      })(); // End IIFE
+    </script>
+  </body>
+</html>
+

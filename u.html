@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Unix timestamp converter" />
+    <title>unix converter | ksr</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      /* Page-specific styles for the converter */
+      .converter-page {
+        position: relative;
+        z-index: 5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 40px 20px;
+      }
+
+      .converter-box {
+        width: min(600px, 90vw);
+        background:
+          radial-gradient(400px 200px at 30% 20%, rgba(255, 79, 216, 0.12), transparent 60%),
+          radial-gradient(400px 200px at 70% 40%, rgba(125, 255, 234, 0.10), transparent 60%),
+          rgba(0, 0, 0, 0.35);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow:
+          0 0 40px rgba(0, 0, 0, 0.6),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+        position: relative;
+        mix-blend-mode: screen;
+      }
+
+      .converter-box::before {
+        content: "";
+        position: absolute;
+        inset: -30px;
+        background:
+          conic-gradient(from 140deg, rgba(255, 79, 216, 0.10), rgba(125, 255, 234, 0.08), rgba(122, 167, 255, 0.08), rgba(255, 79, 216, 0.10));
+        filter: blur(16px);
+        opacity: 0.7;
+        pointer-events: none;
+        z-index: -1;
+      }
+
+      .converter-title {
+        font-size: clamp(20px, 3.5vw, 32px);
+        font-weight: 900;
+        letter-spacing: 3px;
+        text-align: center;
+        margin-bottom: 32px;
+        color: rgba(255, 255, 255, 0.95);
+        text-shadow:
+          0 0 18px rgba(255, 79, 216, 0.35),
+          0 0 22px rgba(125, 255, 234, 0.25);
+        text-transform: lowercase;
+      }
+
+      .converter-section {
+        margin-bottom: 28px;
+      }
+
+      .converter-section:last-child {
+        margin-bottom: 0;
+      }
+
+      .converter-label {
+        display: block;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .converter-input {
+        width: 100%;
+        padding: 14px 16px;
+        background: rgba(0, 0, 0, 0.45);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 15px;
+        font-family: "Courier New", Courier, monospace;
+        letter-spacing: 0.5px;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+        transition: all 0.2s;
+      }
+
+      .converter-input:focus {
+        outline: none;
+        border-color: rgba(125, 255, 234, 0.4);
+        box-shadow:
+          inset 0 0 0 1px rgba(125, 255, 234, 0.1),
+          0 0 20px rgba(125, 255, 234, 0.15);
+      }
+
+      .converter-input::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+
+      .converter-button {
+        width: 100%;
+        padding: 14px;
+        margin-top: 12px;
+        background:
+          linear-gradient(135deg, rgba(125, 255, 234, 0.25), rgba(255, 79, 216, 0.20)),
+          rgba(0, 0, 0, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        border-radius: 12px;
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 700;
+        font-size: 14px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .converter-button:hover {
+        background:
+          linear-gradient(135deg, rgba(125, 255, 234, 0.35), rgba(255, 79, 216, 0.28)),
+          rgba(0, 0, 0, 0.4);
+        box-shadow:
+          0 0 30px rgba(125, 255, 234, 0.25),
+          0 0 20px rgba(0, 0, 0, 0.4);
+        transform: translateY(-1px);
+      }
+
+      .converter-button:active {
+        transform: translateY(0);
+      }
+
+      .converter-output {
+        margin-top: 20px;
+        padding: 16px;
+        background: rgba(0, 0, 0, 0.35);
+        border: 1px solid rgba(255, 255, 255, 0.10);
+        border-radius: 12px;
+        font-family: "Courier New", Courier, monospace;
+        font-size: 14px;
+        color: rgba(125, 255, 234, 0.92);
+        min-height: 24px;
+        word-break: break-all;
+        text-shadow: 0 0 12px rgba(125, 255, 234, 0.20);
+      }
+
+      .converter-output.error {
+        color: rgba(255, 79, 216, 0.92);
+        text-shadow: 0 0 12px rgba(255, 79, 216, 0.20);
+      }
+
+      .converter-divider {
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+        margin: 32px 0;
+      }
+
+      .back-link {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        color: rgba(255, 255, 255, 0.75);
+        text-decoration: none;
+        font-size: 13px;
+        letter-spacing: 1px;
+        padding: 8px 14px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 8px;
+        background: rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(8px);
+        transition: all 0.2s;
+        z-index: 10;
+      }
+
+      .back-link:hover {
+        color: rgba(255, 255, 255, 0.95);
+        border-color: rgba(125, 255, 234, 0.3);
+        box-shadow: 0 0 15px rgba(125, 255, 234, 0.15);
+      }
+
+      @media (max-width: 600px) {
+        .converter-box {
+          padding: 24px;
+        }
+        .back-link {
+          top: 12px;
+          left: 12px;
+          font-size: 12px;
+          padding: 6px 12px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="crt">
+      <canvas id="stars" class="stars" width="1" height="1" aria-hidden="true"></canvas>
+
+      <a href="./" class="back-link">←</a>
+
+      <div class="converter-page">
+        <div class="converter-box">
+          <h1 class="converter-title">unix converter</h1>
+
+          <div class="converter-section">
+            <label class="converter-label" for="unix-input">Unix Timestamp</label>
+            <input
+              type="text"
+              id="unix-input"
+              class="converter-input"
+              placeholder="e.g. 1734567890"
+              autocomplete="off"
+            />
+            <button class="converter-button" onclick="convertFromUnix()">→ human date</button>
+            <div id="unix-output" class="converter-output"></div>
+          </div>
+
+          <div class="converter-divider"></div>
+
+          <div class="converter-section">
+            <label class="converter-label" for="date-input">Human Date</label>
+            <input
+              type="text"
+              id="date-input"
+              class="converter-input"
+              placeholder="e.g. 2024-12-19 12:34:56 or Dec 19, 2024"
+              autocomplete="off"
+            />
+            <button class="converter-button" onclick="convertFromDate()">→ unix timestamp</button>
+            <div id="date-output" class="converter-output"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./script.js"></script>
+    <script>
+      // Unix converter logic (vanilla JS)
+      function convertFromUnix() {
+        const input = document.getElementById("unix-input");
+        const output = document.getElementById("unix-output");
+        const value = input.value.trim();
+
+        if (!value) {
+          output.textContent = "";
+          output.classList.remove("error");
+          return;
+        }
+
+        let timestamp = parseInt(value, 10);
+        if (isNaN(timestamp)) {
+          output.textContent = "Invalid timestamp";
+          output.classList.add("error");
+          return;
+        }
+
+        // Handle milliseconds (13 digits) vs seconds (10 digits)
+        if (timestamp.toString().length === 13) {
+          timestamp = Math.floor(timestamp / 1000);
+        }
+
+        const date = new Date(timestamp * 1000);
+        if (isNaN(date.getTime())) {
+          output.textContent = "Invalid timestamp";
+          output.classList.add("error");
+          return;
+        }
+
+        // Format as YYYY-MM-DD HH:MM:SS
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const hours = String(date.getHours()).padStart(2, "0");
+        const minutes = String(date.getMinutes()).padStart(2, "0");
+        const seconds = String(date.getSeconds()).padStart(2, "0");
+        const formatted = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        
+        output.textContent = formatted;
+        output.classList.remove("error");
+      }
+
+      function convertFromDate() {
+        const input = document.getElementById("date-input");
+        const output = document.getElementById("date-output");
+        const value = input.value.trim();
+
+        if (!value) {
+          output.textContent = "";
+          output.classList.remove("error");
+          return;
+        }
+
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          output.textContent = "Invalid date format";
+          output.classList.add("error");
+          return;
+        }
+
+        const unix = Math.floor(date.getTime() / 1000);
+        output.textContent = unix.toString();
+        output.classList.remove("error");
+      }
+
+      // Auto-convert on Enter key
+      document.getElementById("unix-input").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") convertFromUnix();
+      });
+
+      document.getElementById("date-input").addEventListener("keydown", (e) => {
+        if (e.key === "Enter") convertFromDate();
+      });
+
+      // Auto-convert on input change (debounced)
+      let unixTimeout;
+      document.getElementById("unix-input").addEventListener("input", () => {
+        clearTimeout(unixTimeout);
+        unixTimeout = setTimeout(convertFromUnix, 500);
+      });
+
+      let dateTimeout;
+      document.getElementById("date-input").addEventListener("input", () => {
+        clearTimeout(dateTimeout);
+        dateTimeout = setTimeout(convertFromDate, 500);
+      });
+    </script>
+  </body>
+</html>
+

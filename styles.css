@@ -98,8 +98,72 @@ body {
     drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
 }
 
-.mark__k { color: rgba(255, 255, 255, 0.95); }
-.mark__s { color: rgba(125, 255, 234, 0.92); }
+.mark__k { 
+  position: relative;
+  display: block;
+  font-weight: 900;
+  font-size: clamp(34px, 6.2vw, 72px);
+  letter-spacing: 2px;
+  text-transform: lowercase;
+  color: rgba(255, 255, 255, 0.95);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  filter:
+    drop-shadow(0 0 18px rgba(255, 79, 216, 0.35))
+    drop-shadow(0 0 22px rgba(125, 255, 234, 0.25))
+    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
+}
+.mark__k:hover {
+  opacity: 0.85;
+}
+.mark__k::after {
+  /* spray halo / paint bleed */
+  content: "";
+  position: absolute;
+  inset: -12px -20px;
+  border-radius: 999px;
+  background:
+    radial-gradient(40px 18px at 30% 50%, rgba(255,255,255,0.10), transparent 70%),
+    radial-gradient(60px 24px at 60% 40%, rgba(255,79,216,0.12), transparent 70%),
+    radial-gradient(60px 24px at 45% 60%, rgba(125,255,234,0.10), transparent 70%);
+  filter: blur(9px);
+  opacity: 0.85;
+  pointer-events: none;
+}
+.mark__s {
+  position: relative;
+  display: block;
+  font-weight: 900;
+  font-size: clamp(34px, 6.2vw, 72px);
+  letter-spacing: 2px;
+  text-transform: lowercase;
+  color: rgba(125, 255, 234, 0.92);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  filter:
+    drop-shadow(0 0 18px rgba(255, 79, 216, 0.35))
+    drop-shadow(0 0 22px rgba(125, 255, 234, 0.25))
+    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
+}
+.mark__s:hover {
+  opacity: 0.85;
+}
+.mark__s::after {
+  /* spray halo / paint bleed */
+  content: "";
+  position: absolute;
+  inset: -12px -20px;
+  border-radius: 999px;
+  background:
+    radial-gradient(40px 18px at 30% 50%, rgba(255,255,255,0.10), transparent 70%),
+    radial-gradient(60px 24px at 60% 40%, rgba(255,79,216,0.12), transparent 70%),
+    radial-gradient(60px 24px at 45% 60%, rgba(125,255,234,0.10), transparent 70%);
+  filter: blur(9px);
+  opacity: 0.85;
+  pointer-events: none;
+}
 .mark__r { color: rgba(255, 79, 216, 0.92); }
 
 .mark span::after {
