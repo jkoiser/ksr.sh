@@ -24,9 +24,9 @@
         display: block;
         max-width: 100%;
         max-height: 100%;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(0, 255, 65, 0.18);
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
-        background: rgba(0, 0, 0, 0.2);
+        background: #000000;
       }
 
       .game-ui {
@@ -54,8 +54,8 @@
 
       .back-link:hover {
         color: rgba(255, 255, 255, 0.95);
-        border-color: rgba(125, 255, 234, 0.3);
-        box-shadow: 0 0 15px rgba(125, 255, 234, 0.15);
+        border-color: rgba(0, 255, 65, 0.3);
+        box-shadow: 0 0 15px rgba(0, 255, 65, 0.15);
       }
 
       .score {
@@ -64,13 +64,36 @@
         font-size: 18px;
         font-weight: 700;
         text-shadow:
-          0 0 10px rgba(125, 255, 234, 0.4),
-          0 0 20px rgba(255, 79, 216, 0.3);
+          0 0 10px rgba(255, 255, 255, 0.4),
+          0 0 20px rgba(255, 255, 255, 0.3);
         padding: 8px 14px;
         background: rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(0, 255, 65, 0.18);
         border-radius: 8px;
+      }
+
+      .highscores {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .highscore-item {
+        color: rgba(255, 255, 255, 0.7);
+        font-family: "Courier New", Courier, monospace;
+        font-size: 12px;
+        padding: 4px 10px;
+        background: rgba(0, 0, 0, 0.25);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(0, 255, 65, 0.12);
+        border-radius: 6px;
+      }
+
+      .highscore-item:first-child {
+        color: rgba(255, 255, 255, 0.85);
+        border-color: rgba(0, 255, 65, 0.25);
       }
 
       .game-over {
@@ -89,16 +112,16 @@
 
       .game-over-box {
         background:
-          radial-gradient(400px 200px at 30% 20%, rgba(255, 79, 216, 0.15), transparent 60%),
-          radial-gradient(400px 200px at 70% 40%, rgba(125, 255, 234, 0.12), transparent 60%),
+          radial-gradient(400px 200px at 30% 20%, rgba(0, 255, 65, 0.08), transparent 60%),
+          radial-gradient(400px 200px at 70% 40%, rgba(0, 204, 51, 0.06), transparent 60%),
           rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(0, 255, 65, 0.18);
         border-radius: 20px;
         padding: 40px;
         box-shadow:
           0 0 60px rgba(0, 0, 0, 0.8),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+          inset 0 0 0 1px rgba(0, 255, 65, 0.06);
       }
 
       .game-over-title {
@@ -107,8 +130,8 @@
         letter-spacing: 3px;
         color: rgba(255, 255, 255, 0.95);
         text-shadow:
-          0 0 18px rgba(255, 79, 216, 0.35),
-          0 0 22px rgba(125, 255, 234, 0.25);
+          0 0 18px rgba(255, 255, 255, 0.35),
+          0 0 22px rgba(255, 255, 255, 0.25);
         margin-bottom: 20px;
         text-transform: lowercase;
       }
@@ -116,35 +139,18 @@
       .game-over-score {
         font-family: "Courier New", Courier, monospace;
         font-size: 18px;
-        color: rgba(125, 255, 234, 0.92);
+        color: rgba(255, 255, 255, 0.92);
         margin-bottom: 24px;
-        text-shadow: 0 0 12px rgba(125, 255, 234, 0.3);
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
       }
 
-      .restart-btn {
-        padding: 12px 24px;
-        background:
-          linear-gradient(135deg, rgba(125, 255, 234, 0.25), rgba(255, 79, 216, 0.20)),
-          rgba(0, 0, 0, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 12px;
-        color: rgba(255, 255, 255, 0.95);
-        font-weight: 700;
+      .restart-message {
+        font-family: "Courier New", Courier, monospace;
         font-size: 14px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.2s;
-      }
-
-      .restart-btn:hover {
-        background:
-          linear-gradient(135deg, rgba(125, 255, 234, 0.35), rgba(255, 79, 216, 0.28)),
-          rgba(0, 0, 0, 0.4);
-        box-shadow:
-          0 0 30px rgba(125, 255, 234, 0.25),
-          0 0 20px rgba(0, 0, 0, 0.4);
-        transform: translateY(-1px);
+        color: rgba(255, 255, 255, 0.85);
+        text-align: center;
+        margin-top: 8px;
+        text-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
       }
 
       .instructions {
@@ -173,6 +179,7 @@
         <div class="game-ui">
           <a href="../" class="back-link">←</a>
           <div class="score" id="score">0</div>
+          <div class="highscores" id="highscores"></div>
         </div>
 
         <canvas id="gameCanvas"></canvas>
@@ -181,12 +188,12 @@
           <div class="game-over-box">
             <div class="game-over-title">game over</div>
             <div class="game-over-score">Score: <span id="finalScore">0</span></div>
-            <button class="restart-btn" id="restartBtn">play again</button>
+            <div class="restart-message">Press jump to play again</div>
           </div>
         </div>
 
         <div class="instructions" id="instructions">
-          Press SPACE or ↑ to jump
+          Tap or press SPACE/↑ to jump
         </div>
       </div>
     </div>
@@ -209,6 +216,38 @@
       let score = 0;
       let gameSpeed = 4;
       let frameCount = 0;
+
+      // Highscore management
+      function getHighscores() {
+        const stored = localStorage.getItem("teddyHighscores");
+        return stored ? JSON.parse(stored) : [];
+      }
+
+      function saveHighscore(newScore) {
+        let highscores = getHighscores();
+        highscores.push(newScore);
+        highscores.sort((a, b) => b - a); // Sort descending
+        highscores = highscores.slice(0, 5); // Keep top 5
+        localStorage.setItem("teddyHighscores", JSON.stringify(highscores));
+        return highscores;
+      }
+
+      function updateHighscoresDisplay() {
+        const highscores = getHighscores();
+        const container = document.getElementById("highscores");
+        container.innerHTML = "";
+        
+        if (highscores.length === 0) {
+          return;
+        }
+
+        highscores.forEach((score, index) => {
+          const item = document.createElement("div");
+          item.className = "highscore-item";
+          item.textContent = `${index + 1}. ${score}`;
+          container.appendChild(item);
+        });
+      }
 
       // Set canvas size
       function resizeCanvas() {
@@ -246,30 +285,21 @@
         y: 0,
       };
 
-      // Obstacles (stuffed animals)
+      // Obstacles (soft play blocks) - smaller size
       const obstacles = [];
       const obstacleTypes = [
-        { width: 40, height: 50, color: [125, 255, 234] }, // cyan bear
-        { width: 45, height: 45, color: [255, 79, 216] }, // pink bunny
-        { width: 35, height: 55, color: [122, 167, 255] }, // blue elephant
-        { width: 50, height: 40, color: [255, 230, 109] }, // yellow duck
+        { type: "cube", width: 35, height: 35, color: [255, 60, 60] }, // red cube
+        { type: "cube", width: 35, height: 35, color: [60, 150, 255] }, // blue cube
+        { type: "cube", width: 35, height: 35, color: [255, 220, 60] }, // yellow cube
+        { type: "cube", width: 35, height: 35, color: [60, 200, 80] }, // green cube
+        { type: "cylinder", width: 32, height: 40, color: [255, 60, 60] }, // red cylinder
+        { type: "cylinder", width: 32, height: 40, color: [60, 150, 255] }, // blue cylinder
+        { type: "rect", width: 40, height: 30, color: [255, 220, 60] }, // yellow rect
+        { type: "rect", width: 40, height: 30, color: [60, 200, 80] }, // green rect
+        { type: "triangle", width: 35, height: 35, color: [255, 60, 60] }, // red triangle
+        { type: "disc", width: 40, height: 25, color: [60, 150, 255] }, // blue disc
       ];
 
-      // Background elements (subtle animation)
-      const bgElements = [];
-
-      function initBgElements() {
-        bgElements.length = 0;
-        for (let i = 0; i < 8; i++) {
-          bgElements.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height * 0.6,
-            size: 20 + Math.random() * 30,
-            opacity: 0.05 + Math.random() * 0.08,
-            speed: 0.3 + Math.random() * 0.4,
-          });
-        }
-      }
 
       // Initialize
       function init() {
@@ -282,138 +312,252 @@
         gameSpeed = 4;
         frameCount = 0;
         gameState = "playing";
-        initBgElements();
         document.getElementById("gameOver").classList.remove("active");
         document.getElementById("instructions").style.display = "block";
+        updateHighscoresDisplay();
       }
 
-      // Draw teddy bear
+      // Draw teddy bear (pixel art style)
       function drawTeddy() {
         ctx.save();
-        ctx.translate(teddy.x + teddy.width / 2, teddy.y + teddy.height / 2);
-
-        // Body (brown/tan with neon glow)
-        ctx.fillStyle = `rgba(180, 140, 100, 0.9)`;
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = "rgba(125, 255, 234, 0.4)";
-        ctx.beginPath();
-        ctx.ellipse(0, 5, teddy.width / 2.5, teddy.height / 2.2, 0, 0, Math.PI * 2);
-        ctx.fill();
-
+        ctx.imageSmoothingEnabled = false; // Pixel art style
+        
+        const x = teddy.x;
+        const y = teddy.y;
+        const w = teddy.width;
+        const h = teddy.height;
+        const pixelSize = 3; // Size of each "pixel"
+        
+        // Helper to draw a pixel block
+        function pixel(px, py, color) {
+          ctx.fillStyle = color;
+          ctx.fillRect(x + px * pixelSize, y + py * pixelSize, pixelSize, pixelSize);
+        }
+        
+        // Body (brown)
+        const brown = "#A67C52";
+        const lightBrown = "#D4A574";
+        const white = "#F5F5DC";
+        const black = "#1A1A1A";
+        const pink = "#FFB6C1";
+        
+        // Body outline and fill
+        for (let py = 8; py < 14; py++) {
+          for (let px = 4; px < 13; px++) {
+            if (py === 8 || py === 13 || px === 4 || px === 12) {
+              pixel(px, py, "#8B5A3C"); // Darker brown outline
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        
         // Head
-        ctx.beginPath();
-        ctx.arc(0, -teddy.height / 3, teddy.width / 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Ears
-        ctx.beginPath();
-        ctx.arc(-teddy.width / 4, -teddy.height / 2.5, teddy.width / 6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(teddy.width / 4, -teddy.height / 2.5, teddy.width / 6, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Eyes (simple dots with glow)
-        ctx.fillStyle = "rgba(255, 79, 216, 0.9)";
-        ctx.shadowColor = "rgba(255, 79, 216, 0.6)";
-        ctx.beginPath();
-        ctx.arc(-teddy.width / 8, -teddy.height / 3.5, 3, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(teddy.width / 8, -teddy.height / 3.5, 3, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Nose
-        ctx.fillStyle = "rgba(125, 255, 234, 0.9)";
-        ctx.shadowColor = "rgba(125, 255, 234, 0.6)";
-        ctx.beginPath();
-        ctx.arc(0, -teddy.height / 4, 2, 0, Math.PI * 2);
-        ctx.fill();
-
+        for (let py = 0; py < 8; py++) {
+          for (let px = 3; px < 14; px++) {
+            if (py === 0 || py === 7 || px === 3 || px === 13) {
+              pixel(px, py, "#8B5A3C"); // Outline
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        
+        // White snout area
+        for (let py = 3; py < 6; py++) {
+          for (let px = 6; px < 11; px++) {
+            pixel(px, py, white);
+          }
+        }
+        
+        // Black square eyes
+        pixel(6, 2, black);
+        pixel(7, 2, black);
+        pixel(9, 2, black);
+        pixel(10, 2, black);
+        
+        // Black square nose
+        pixel(7, 4, black);
+        pixel(8, 4, black);
+        pixel(9, 4, black);
+        pixel(7, 5, black);
+        pixel(8, 5, black);
+        pixel(9, 5, black);
+        
+        // Pink blush squares on cheeks
+        pixel(4, 4, pink);
+        pixel(5, 4, pink);
+        pixel(11, 4, pink);
+        pixel(12, 4, pink);
+        
+        // Ears (left)
+        for (let py = 1; py < 4; py++) {
+          for (let px = 1; px < 4; px++) {
+            if (py === 1 || px === 1 || px === 3) {
+              pixel(px, py, "#8B5A3C");
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        // Inner ear (left)
+        pixel(2, 2, lightBrown);
+        
+        // Ears (right)
+        for (let py = 1; py < 4; py++) {
+          for (let px = 13; px < 16; px++) {
+            if (py === 1 || px === 13 || px === 15) {
+              pixel(px, py, "#8B5A3C");
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        // Inner ear (right)
+        pixel(14, 2, lightBrown);
+        
+        // Arms (left)
+        for (let py = 9; py < 13; py++) {
+          for (let px = 1; px < 4; px++) {
+            if (py === 9 || px === 1 || px === 3) {
+              pixel(px, py, "#8B5A3C");
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        // Paw pad (left)
+        pixel(2, 11, lightBrown);
+        
+        // Arms (right)
+        for (let py = 9; py < 13; py++) {
+          for (let px = 13; px < 16; px++) {
+            if (py === 9 || px === 13 || px === 15) {
+              pixel(px, py, "#8B5A3C");
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        // Paw pad (right)
+        pixel(14, 11, lightBrown);
+        
+        // Legs (left)
+        for (let py = 14; py < 17; py++) {
+          for (let px = 5; px < 8; px++) {
+            if (py === 14 || px === 5 || px === 7) {
+              pixel(px, py, "#8B5A3C");
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        // Paw pad (left foot)
+        pixel(6, 15, lightBrown);
+        
+        // Legs (right)
+        for (let py = 14; py < 17; py++) {
+          for (let px = 9; px < 12; px++) {
+            if (py === 14 || px === 9 || px === 11) {
+              pixel(px, py, "#8B5A3C");
+            } else {
+              pixel(px, py, brown);
+            }
+          }
+        }
+        // Paw pad (right foot)
+        pixel(10, 15, lightBrown);
+        
+        ctx.imageSmoothingEnabled = true; // Restore smoothing
         ctx.restore();
       }
 
-      // Draw obstacle (stuffed animal)
+      // Draw obstacle (soft play block) - SIMPLIFIED for maximum visibility
       function drawObstacle(obs) {
-        ctx.save();
-        ctx.translate(obs.x + obs.width / 2, obs.y + obs.height / 2);
-
-        const [colorR, colorG, colorB] = obs.color;
-        ctx.fillStyle = `rgba(${colorR}, ${colorG}, ${colorB}, 0.85)`;
-        ctx.shadowBlur = 12;
-        ctx.shadowColor = `rgba(${colorR}, ${colorG}, ${colorB}, 0.5)`;
-
-        // Simple rounded rectangle shape (stuffed animal body)
-        const cornerRadius = 8;
-        const x = -obs.width / 2;
-        const y = -obs.height / 2;
+        const [r, g, b] = obs.color;
+        const x = obs.x;
+        const y = obs.y;
         const w = obs.width;
         const h = obs.height;
-        ctx.beginPath();
-        ctx.moveTo(x + cornerRadius, y);
-        ctx.lineTo(x + w - cornerRadius, y);
-        ctx.quadraticCurveTo(x + w, y, x + w, y + cornerRadius);
-        ctx.lineTo(x + w, y + h - cornerRadius);
-        ctx.quadraticCurveTo(x + w, y + h, x + w - cornerRadius, y + h);
-        ctx.lineTo(x + cornerRadius, y + h);
-        ctx.quadraticCurveTo(x, y + h, x, y + h - cornerRadius);
-        ctx.lineTo(x, y + cornerRadius);
-        ctx.quadraticCurveTo(x, y, x + cornerRadius, y);
-        ctx.closePath();
-        ctx.fill();
 
-        // Add a simple face
-        ctx.fillStyle = `rgba(255, 255, 255, 0.9)`;
-        ctx.shadowBlur = 6;
-        ctx.shadowColor = "rgba(255, 255, 255, 0.4)";
-        ctx.beginPath();
-        ctx.arc(0, -obs.height / 6, obs.width / 6, 0, Math.PI * 2);
-        ctx.fill();
+        // WHITE OUTLINE for maximum visibility (thick)
+        ctx.strokeStyle = "#FFFFFF";
+        ctx.lineWidth = 6;
+        ctx.strokeRect(x - 4, y - 4, w + 8, h + 8);
+        
+        // Bright fill (saturated colors)
+        ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+        ctx.fillRect(x, y, w, h);
+        
+        // Add inner highlight for depth
+        ctx.fillStyle = `rgba(255, 255, 255, 0.3)`;
+        ctx.fillRect(x, y, w, h / 3);
+        
+        // Simple shape indicator based on type
+        ctx.save();
+        ctx.translate(x + w / 2, y + h / 2);
+
+        // Simple shape indicators (optional - just for variety)
+        if (obs.type === "cylinder" || obs.type === "disc") {
+          // Draw rounded top/bottom for cylinders and discs
+          ctx.fillStyle = `rgb(${Math.min(255, r + 40)}, ${Math.min(255, g + 40)}, ${Math.min(255, b + 40)})`;
+          ctx.beginPath();
+          ctx.arc(0, -h / 2 + 5, 8, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (obs.type === "triangle") {
+          // Draw triangle indicator
+          ctx.fillStyle = `rgb(${Math.min(255, r + 40)}, ${Math.min(255, g + 40)}, ${Math.min(255, b + 40)})`;
+          ctx.beginPath();
+          ctx.moveTo(0, -h / 2 + 5);
+          ctx.lineTo(-8, -h / 2 + 15);
+          ctx.lineTo(8, -h / 2 + 15);
+          ctx.closePath();
+          ctx.fill();
+        }
 
         ctx.restore();
       }
 
-      // Draw ground
+      // Draw ground (white-ish floor)
       function drawGround() {
-        // Ground line
-        ctx.strokeStyle = `rgba(125, 255, 234, 0.3)`;
-        ctx.lineWidth = 2;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = "rgba(125, 255, 234, 0.2)";
-        ctx.beginPath();
-        ctx.moveTo(0, ground.y);
-        ctx.lineTo(canvas.width, ground.y);
-        ctx.stroke();
-
-        // Ground fill (subtle)
-        ctx.fillStyle = `rgba(0, 0, 0, 0.2)`;
-        ctx.fillRect(0, ground.y, canvas.width, ground.height);
+        const floorY = ground.y;
+        const floorHeight = canvas.height - floorY;
+        
+        // White-ish floor
+        const floorGrad = ctx.createLinearGradient(0, floorY, 0, canvas.height);
+        floorGrad.addColorStop(0, "#F5F5F5");
+        floorGrad.addColorStop(0.3, "#E8E8E8");
+        floorGrad.addColorStop(1, "#DDDDDD");
+        ctx.fillStyle = floorGrad;
+        ctx.fillRect(0, floorY, canvas.width, floorHeight);
+        
+        // Subtle floor shadow at top edge
+        const shadowGrad = ctx.createLinearGradient(0, floorY - 5, 0, floorY);
+        shadowGrad.addColorStop(0, "rgba(0, 0, 0, 0.1)");
+        shadowGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
+        ctx.fillStyle = shadowGrad;
+        ctx.fillRect(0, floorY - 5, canvas.width, 5);
       }
 
-      // Draw background (subtle animated elements)
+      // Draw background (Matrix green/black theme)
       function drawBackground() {
-        // Painted wash effect
-        const wob = Math.sin(frameCount / 180);
-        const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-        grad.addColorStop(0, `rgba(255, 79, 216, ${0.03 + 0.01 * wob})`);
-        grad.addColorStop(0.5, `rgba(125, 255, 234, ${0.025 + 0.01 * (1 - wob)})`);
-        grad.addColorStop(1, `rgba(122, 167, 255, ${0.025 + 0.008 * wob})`);
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const floorY = ground.y;
 
-        // Floating elements (subtle)
-        bgElements.forEach((el) => {
-          el.x -= el.speed;
-          if (el.x + el.size < 0) {
-            el.x = canvas.width + el.size;
-            el.y = Math.random() * canvas.height * 0.6;
-          }
-
-          ctx.fillStyle = `rgba(255, 255, 255, ${el.opacity})`;
-          ctx.beginPath();
-          ctx.arc(el.x, el.y, el.size / 2, 0, Math.PI * 2);
-          ctx.fill();
-        });
+        // Matrix green/black background (above floor)
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, floorY);
+        bgGrad.addColorStop(0, "#000000");
+        bgGrad.addColorStop(0.5, "#001100");
+        bgGrad.addColorStop(1, "#000000");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, canvas.width, floorY);
+        
+        // Subtle Matrix green tint overlay
+        const greenOverlay = ctx.createLinearGradient(0, 0, canvas.width, floorY);
+        greenOverlay.addColorStop(0, "rgba(0, 255, 65, 0.02)");
+        greenOverlay.addColorStop(0.5, "rgba(0, 204, 51, 0.015)");
+        greenOverlay.addColorStop(1, "rgba(0, 255, 65, 0.02)");
+        ctx.fillStyle = greenOverlay;
+        ctx.fillRect(0, 0, canvas.width, floorY);
       }
 
       // Update game
@@ -443,13 +587,17 @@
         const spawnInterval = Math.max(90, 150 - Math.floor(score / 30));
         if (frameCount === 60 || (frameCount > 60 && (frameCount - 60) % spawnInterval === 0)) {
           const type = obstacleTypes[Math.floor(Math.random() * obstacleTypes.length)];
+          const obsY = teddy.groundY + teddy.height - type.height;
           obstacles.push({
             x: canvas.width,
-            y: teddy.groundY + teddy.height - type.height,
+            y: obsY,
             width: type.width,
             height: type.height,
             color: type.color,
+            type: type.type,
           });
+          // Debug: log obstacle spawn
+          console.log("Obstacle spawned:", { x: canvas.width, y: obsY, width: type.width, height: type.height, groundY: teddy.groundY, teddyY: teddy.y });
         }
 
         // Update obstacles
@@ -492,6 +640,10 @@
         document.getElementById("finalScore").textContent = score;
         document.getElementById("gameOver").classList.add("active");
         document.getElementById("instructions").style.display = "none";
+        
+        // Save and update highscores
+        saveHighscore(score);
+        updateHighscoresDisplay();
       }
 
       // Restart
@@ -531,7 +683,21 @@
         }
       });
 
-      // Touch controls
+      // Touch controls - make the whole game area tappable
+      const gameContainer = document.querySelector(".game-container");
+      let touchStartY = 0;
+      
+      gameContainer.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        touchStartY = e.touches[0].clientY;
+        if (gameState === "gameOver") {
+          restartGame();
+        } else {
+          jump();
+        }
+      }, { passive: false });
+
+      // Also allow tap anywhere on the canvas
       canvas.addEventListener("touchstart", (e) => {
         e.preventDefault();
         if (gameState === "gameOver") {
@@ -539,7 +705,7 @@
         } else {
           jump();
         }
-      });
+      }, { passive: false });
 
       // Start game when DOM is ready
       if (document.readyState === 'loading') {

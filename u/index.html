@@ -22,16 +22,17 @@
       .converter-box {
         width: min(600px, 90vw);
         background:
-          radial-gradient(400px 200px at 30% 20%, rgba(255, 79, 216, 0.12), transparent 60%),
-          radial-gradient(400px 200px at 70% 40%, rgba(125, 255, 234, 0.10), transparent 60%),
+          radial-gradient(400px 200px at 30% 20%, rgba(0, 153, 38, 0.06), transparent 60%),
+          radial-gradient(400px 200px at 70% 40%, rgba(0, 102, 26, 0.05), transparent 60%),
           rgba(0, 0, 0, 0.35);
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(0, 153, 38, 0.15);
         border-radius: 20px;
         padding: 32px;
         box-shadow:
           0 0 40px rgba(0, 0, 0, 0.6),
-          inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+          inset 0 0 0 1px rgba(0, 153, 38, 0.06),
+          inset 0 0 60px rgba(0, 102, 26, 0.03);
         position: relative;
         mix-blend-mode: screen;
       }
@@ -41,9 +42,9 @@
         position: absolute;
         inset: -30px;
         background:
-          conic-gradient(from 140deg, rgba(255, 79, 216, 0.10), rgba(125, 255, 234, 0.08), rgba(122, 167, 255, 0.08), rgba(255, 79, 216, 0.10));
+          conic-gradient(from 140deg, rgba(0, 153, 38, 0.08), rgba(0, 102, 26, 0.06), rgba(0, 77, 19, 0.06), rgba(0, 153, 38, 0.08));
         filter: blur(16px);
-        opacity: 0.7;
+        opacity: 0.5;
         pointer-events: none;
         z-index: -1;
       }
@@ -56,8 +57,9 @@
         margin-bottom: 32px;
         color: rgba(255, 255, 255, 0.95);
         text-shadow:
-          0 0 18px rgba(255, 79, 216, 0.35),
-          0 0 22px rgba(125, 255, 234, 0.25);
+          0 0 18px rgba(255, 255, 255, 0.35),
+          0 0 22px rgba(255, 255, 255, 0.25),
+          0 10px 30px rgba(0, 0, 0, 0.45);
         text-transform: lowercase;
       }
 
@@ -94,66 +96,36 @@
 
       .converter-input:focus {
         outline: none;
-        border-color: rgba(125, 255, 234, 0.4);
+        border-color: rgba(0, 255, 65, 0.4);
         box-shadow:
-          inset 0 0 0 1px rgba(125, 255, 234, 0.1),
-          0 0 20px rgba(125, 255, 234, 0.15);
+          inset 0 0 0 1px rgba(0, 255, 65, 0.1),
+          0 0 20px rgba(0, 255, 65, 0.15);
       }
 
       .converter-input::placeholder {
         color: rgba(255, 255, 255, 0.35);
       }
 
-      .converter-button {
-        width: 100%;
-        padding: 14px;
-        margin-top: 12px;
-        background:
-          linear-gradient(135deg, rgba(125, 255, 234, 0.25), rgba(255, 79, 216, 0.20)),
-          rgba(0, 0, 0, 0.4);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 12px;
-        color: rgba(255, 255, 255, 0.95);
-        font-weight: 700;
-        font-size: 14px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition: all 0.2s;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-      }
-
-      .converter-button:hover {
-        background:
-          linear-gradient(135deg, rgba(125, 255, 234, 0.35), rgba(255, 79, 216, 0.28)),
-          rgba(0, 0, 0, 0.4);
-        box-shadow:
-          0 0 30px rgba(125, 255, 234, 0.25),
-          0 0 20px rgba(0, 0, 0, 0.4);
-        transform: translateY(-1px);
-      }
-
-      .converter-button:active {
-        transform: translateY(0);
-      }
 
       .converter-output {
         margin-top: 20px;
         padding: 16px;
         background: rgba(0, 0, 0, 0.35);
-        border: 1px solid rgba(255, 255, 255, 0.10);
+        border: 1px solid rgba(0, 255, 65, 0.18);
         border-radius: 12px;
         font-family: "Courier New", Courier, monospace;
         font-size: 14px;
-        color: rgba(125, 255, 234, 0.92);
+        color: rgba(255, 255, 255, 0.95);
         min-height: 24px;
         word-break: break-all;
-        text-shadow: 0 0 12px rgba(125, 255, 234, 0.20);
+        text-shadow: 
+          0 0 12px rgba(255, 255, 255, 0.20),
+          0 0 18px rgba(255, 255, 255, 0.15);
       }
 
       .converter-output.error {
-        color: rgba(255, 79, 216, 0.92);
-        text-shadow: 0 0 12px rgba(255, 79, 216, 0.20);
+        color: rgba(255, 100, 100, 0.95);
+        text-shadow: 0 0 12px rgba(255, 100, 100, 0.30);
       }
 
       .converter-divider {
@@ -181,8 +153,8 @@
 
       .back-link:hover {
         color: rgba(255, 255, 255, 0.95);
-        border-color: rgba(125, 255, 234, 0.3);
-        box-shadow: 0 0 15px rgba(125, 255, 234, 0.15);
+        border-color: rgba(0, 255, 65, 0.3);
+        box-shadow: 0 0 15px rgba(0, 255, 65, 0.15);
       }
 
       @media (max-width: 600px) {
@@ -217,7 +189,6 @@
               placeholder="e.g. 1734567890"
               autocomplete="off"
             />
-            <button class="converter-button" onclick="convertFromUnix()">→ human date</button>
             <div id="unix-output" class="converter-output"></div>
           </div>
 
@@ -232,7 +203,6 @@
               placeholder="e.g. 2024-12-19 12:34:56 or Dec 19, 2024"
               autocomplete="off"
             />
-            <button class="converter-button" onclick="convertFromDate()">→ unix timestamp</button>
             <div id="date-output" class="converter-output"></div>
           </div>
         </div>

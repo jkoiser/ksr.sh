@@ -1,14 +1,14 @@
 :root {
-  --bg0: #07031a;
-  --bg1: #140a33;
-  --ink: rgba(255, 255, 255, 0.94);
-  --dim: rgba(255, 255, 255, 0.72);
-  --neon: #7dffea;
-  --neon2: #7aa7ff;
-  --hot: #ff4fd8;
-  --warn: #ffe66d;
+  --bg0: #000000;
+  --bg1: #001100;
+  --ink: rgba(0, 255, 65, 0.94);
+  --dim: rgba(0, 255, 65, 0.72);
+  --neon: #00ff41;
+  --neon2: #00cc33;
+  --hot: #00ff41;
+  --warn: #00ff41;
   --panel: rgba(0, 0, 0, 0.48);
-  --border: rgba(255, 255, 255, 0.18);
+  --border: rgba(0, 255, 65, 0.18);
   --shadow: rgba(0, 0, 0, 0.65);
 }
 
@@ -27,8 +27,8 @@ body {
   margin: 0;
   color: var(--ink);
   background:
-    radial-gradient(900px 650px at 30% 20%, rgba(255, 79, 216, 0.16), transparent 55%),
-    radial-gradient(900px 650px at 70% 30%, rgba(125, 255, 234, 0.14), transparent 55%),
+    radial-gradient(900px 650px at 30% 20%, rgba(0, 255, 65, 0.08), transparent 55%),
+    radial-gradient(900px 650px at 70% 30%, rgba(0, 204, 51, 0.06), transparent 55%),
     radial-gradient(1200px 800px at 50% 20%, var(--bg1), var(--bg0));
   font-family: "Trebuchet MS", Verdana, Tahoma, Arial, sans-serif;
   overflow: hidden;
@@ -83,6 +83,7 @@ body {
   user-select: none;
   mix-blend-mode: screen;
   opacity: 0.96;
+  will-change: transform;
 }
 
 .mark span {
@@ -92,10 +93,6 @@ body {
   font-size: clamp(34px, 6.2vw, 72px);
   letter-spacing: 2px;
   text-transform: lowercase;
-  filter:
-    drop-shadow(0 0 18px rgba(255, 79, 216, 0.35))
-    drop-shadow(0 0 22px rgba(125, 255, 234, 0.25))
-    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
 }
 
 .mark__k { 
@@ -108,10 +105,10 @@ body {
   color: rgba(255, 255, 255, 0.95);
   text-decoration: none;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   filter:
-    drop-shadow(0 0 18px rgba(255, 79, 216, 0.35))
-    drop-shadow(0 0 22px rgba(125, 255, 234, 0.25))
+    drop-shadow(0 0 18px rgba(255, 255, 255, 0.35))
+    drop-shadow(0 0 22px rgba(255, 255, 255, 0.25))
     drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
 }
 .mark__k:hover {
@@ -125,8 +122,8 @@ body {
   border-radius: 999px;
   background:
     radial-gradient(40px 18px at 30% 50%, rgba(255,255,255,0.10), transparent 70%),
-    radial-gradient(60px 24px at 60% 40%, rgba(255,79,216,0.12), transparent 70%),
-    radial-gradient(60px 24px at 45% 60%, rgba(125,255,234,0.10), transparent 70%);
+    radial-gradient(60px 24px at 60% 40%, rgba(255,255,255,0.12), transparent 70%),
+    radial-gradient(60px 24px at 45% 60%, rgba(255,255,255,0.10), transparent 70%);
   filter: blur(9px);
   opacity: 0.85;
   pointer-events: none;
@@ -138,13 +135,13 @@ body {
   font-size: clamp(34px, 6.2vw, 72px);
   letter-spacing: 2px;
   text-transform: lowercase;
-  color: rgba(125, 255, 234, 0.92);
+  color: rgba(255, 255, 255, 0.95);
   text-decoration: none;
   cursor: pointer;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   filter:
-    drop-shadow(0 0 18px rgba(255, 79, 216, 0.35))
-    drop-shadow(0 0 22px rgba(125, 255, 234, 0.25))
+    drop-shadow(0 0 18px rgba(255, 255, 255, 0.35))
+    drop-shadow(0 0 22px rgba(255, 255, 255, 0.25))
     drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
 }
 .mark__s:hover {
@@ -158,13 +155,45 @@ body {
   border-radius: 999px;
   background:
     radial-gradient(40px 18px at 30% 50%, rgba(255,255,255,0.10), transparent 70%),
-    radial-gradient(60px 24px at 60% 40%, rgba(255,79,216,0.12), transparent 70%),
-    radial-gradient(60px 24px at 45% 60%, rgba(125,255,234,0.10), transparent 70%);
+    radial-gradient(60px 24px at 60% 40%, rgba(255,255,255,0.12), transparent 70%),
+    radial-gradient(60px 24px at 45% 60%, rgba(255,255,255,0.10), transparent 70%);
   filter: blur(9px);
   opacity: 0.85;
   pointer-events: none;
 }
-.mark__r { color: rgba(255, 79, 216, 0.92); }
+.mark__r { 
+  color: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  filter:
+    drop-shadow(0 0 18px rgba(255, 255, 255, 0.35))
+    drop-shadow(0 0 22px rgba(255, 255, 255, 0.25))
+    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
+}
+.mark__r:hover {
+  opacity: 0.85;
+}
+
+.mark-subtitle {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + clamp(40px, 7vw, 80px));
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  font-size: clamp(8.5px, 1.55vw, 18px);
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: lowercase;
+  user-select: none;
+  mix-blend-mode: screen;
+  opacity: 0.90;
+  will-change: transform;
+  filter:
+    drop-shadow(0 0 8px rgba(255, 255, 255, 0.25))
+    drop-shadow(0 0 12px rgba(255, 255, 255, 0.15))
+    drop-shadow(0 5px 15px rgba(0, 0, 0, 0.35));
+}
 
 .mark span::after {
   /* spray halo / paint bleed */
@@ -174,8 +203,8 @@ body {
   border-radius: 999px;
   background:
     radial-gradient(40px 18px at 30% 50%, rgba(255,255,255,0.10), transparent 70%),
-    radial-gradient(60px 24px at 60% 40%, rgba(255,79,216,0.12), transparent 70%),
-    radial-gradient(60px 24px at 45% 60%, rgba(125,255,234,0.10), transparent 70%);
+    radial-gradient(60px 24px at 60% 40%, rgba(255,255,255,0.12), transparent 70%),
+    radial-gradient(60px 24px at 45% 60%, rgba(255,255,255,0.10), transparent 70%);
   filter: blur(9px);
   opacity: 0.85;
   pointer-events: none;
@@ -202,6 +231,7 @@ body {
   height: 100%;
   display: block;
   z-index: 0;
+  pointer-events: none;
 }
 
 /* (old UI/layout styles removed from HTML; kept here only as dead code would be confusing) */

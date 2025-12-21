@@ -15,6 +15,9 @@
     let t = 0;
     let raf = 0;
 
+    // Matrix characters pool
+    const matrixChars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
     function resize() {
       const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       w = Math.floor(window.innerWidth * dpr);
@@ -31,6 +34,7 @@
         vx: (-0.2 + Math.random() * 0.4),
         vy: (0.15 + Math.random() * 0.45),
         ph: Math.random() * Math.PI * 2,
+        char: matrixChars[Math.floor(Math.random() * matrixChars.length)],
       }));
     }
 
@@ -38,16 +42,16 @@
       t += 1;
       ctx.clearRect(0, 0, w, h);
 
-      // Soft painted wash (changes slowly, makes everything feel blended)
+      // Soft painted wash (Matrix green tint)
       const wob = Math.sin(t / 220);
       const grad = ctx.createLinearGradient(0, 0, w, h);
-      grad.addColorStop(0, `rgba(255, 79, 216, ${0.05 + 0.02 * wob})`);
-      grad.addColorStop(0.5, `rgba(125, 255, 234, ${0.04 + 0.02 * (1 - wob)})`);
-      grad.addColorStop(1, `rgba(122, 167, 255, ${0.04 + 0.015 * wob})`);
+      grad.addColorStop(0, `rgba(0, 255, 65, ${0.02 + 0.01 * wob})`);
+      grad.addColorStop(0.5, `rgba(0, 204, 51, ${0.015 + 0.01 * (1 - wob)})`);
+      grad.addColorStop(1, `rgba(0, 153, 38, ${0.01 + 0.008 * wob})`);
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
 
-      // Occasional “spray smears”
+      // Occasional "spray smears" (Matrix green)
       if (t % 90 === 0) {
         const cx = Math.random() * w;
         const cy = Math.random() * h;
@@ -57,8 +61,8 @@
         ctx.translate(cx, cy);
         ctx.rotate((-0.4 + Math.random() * 0.8));
         const g = ctx.createRadialGradient(0, 0, 10, 0, 0, rx);
-        g.addColorStop(0, "rgba(255,255,255,0.06)");
-        g.addColorStop(0.35, "rgba(255,79,216,0.05)");
+        g.addColorStop(0, "rgba(0,255,65,0.03)");
+        g.addColorStop(0.35, "rgba(0,204,51,0.02)");
         g.addColorStop(1, "rgba(0,0,0,0)");
         ctx.fillStyle = g;
         ctx.scale(1, ry / rx);
@@ -68,6 +72,10 @@
         ctx.restore();
       }
 
+      // Set text alignment for Matrix characters
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
       for (const s of p) {
         s.x += s.vx;
         s.y += s.vy;
@@ -75,6 +83,10 @@
         if (s.y > h + 12) {
           s.y = -12;
           s.x = Math.random() * w;
+          // Randomly change character when wrapping
+          if (Math.random() < 0.3) {
+            s.char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+          }
         }
         if (s.x < -12) s.x = w + 12;
         if (s.x > w + 12) s.x = -12;
@@ -82,15 +94,15 @@
         const tw = 0.55 + 0.45 * Math.sin(s.ph);
         const a = 0.08 + tw * 0.20;
 
-        // glittery tint
-        const r = 220 + Math.floor(35 * tw);
-        const g = 210 + Math.floor(55 * (1 - tw));
-        const b = 255;
+        // Matrix green color
+        const green = Math.floor(65 + 190 * tw); // Vary between 65 and 255
+        const r = 0;
+        const g = green;
+        const b = Math.floor(green * 0.25); // Slight blue tint
 
-        ctx.beginPath();
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
-        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.font = `${s.r * 2}px "Courier New", monospace`;
+        ctx.fillText(s.char, s.x, s.y);
       }
       raf = requestAnimationFrame(draw);
     }
@@ -106,6 +118,85 @@
 
   // --- Start (purely visual)
   if (els.stars) createPaint(els.stars);
+
+  // --- Letter slide animation
+  function initSlideAnimation() {
+    const markR = document.getElementById("markR");
+    const markContainer = document.querySelector(".mark");
+    const markSubtitle = document.getElementById("markSubtitle");
+
+    if (!markR) {
+      console.warn("markR element not found");
+      return;
+    }
+    if (!markContainer) {
+      console.warn("markContainer element not found");
+      return;
+    }
+    if (!markSubtitle) {
+      console.warn("markSubtitle element not found");
+      return;
+    }
+
+    let isAnimating = false;
+
+    function animateSlide() {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      // Get the current position of the container
+      const containerRect = markContainer.getBoundingClientRect();
+      const containerCenterX = containerRect.left + containerRect.width / 2;
+      const viewportWidth = window.innerWidth;
+
+      // Calculate how far to slide right (off screen)
+      const slideDistance = viewportWidth - containerCenterX + containerRect.width / 2 + 100;
+
+      // Phase 1: Slide right and out (ksr), left and out (subtitle)
+      markContainer.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+      markContainer.style.transform = `translate(calc(-50% + ${slideDistance}px), -50%)`;
+      
+      markSubtitle.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+      markSubtitle.style.transform = `translate(calc(-50% - ${slideDistance}px), -50%)`;
+
+      // Phase 2: After sliding out, reset position and slide in
+      setTimeout(() => {
+        // Reset ksr to left side (off screen)
+        markContainer.style.transition = "none";
+        markContainer.style.transform = `translate(calc(-50% - ${viewportWidth}px), -50%)`;
+        
+        // Reset subtitle to right side (off screen)
+        markSubtitle.style.transition = "none";
+        markSubtitle.style.transform = `translate(calc(-50% + ${viewportWidth}px), -50%)`;
+
+        // Force reflow
+        markContainer.offsetHeight;
+        markSubtitle.offsetHeight;
+
+        // Phase 3: Slide in from opposite sides to center
+        markContainer.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+        markContainer.style.transform = "translate(-50%, -50%)";
+        
+        markSubtitle.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+        markSubtitle.style.transform = "translate(-50%, -50%)";
+
+        // Reset animation state after animation completes
+        setTimeout(() => {
+          isAnimating = false;
+        }, 800);
+      }, 800);
+    }
+
+    markR.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("r clicked!");
+      animateSlide();
+    });
+  }
+
+  // Initialize - script is at bottom of body so DOM is ready
+  initSlideAnimation();
 })();
 
 
