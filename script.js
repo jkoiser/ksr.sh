@@ -153,10 +153,10 @@
       const slideDistance = viewportWidth - containerCenterX + containerRect.width / 2 + 100;
 
       // Phase 1: Slide right and out (ksr), left and out (subtitle)
-      markContainer.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+      markContainer.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
       markContainer.style.transform = `translate(calc(-50% + ${slideDistance}px), -50%)`;
       
-      markSubtitle.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+      markSubtitle.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
       markSubtitle.style.transform = `translate(calc(-50% - ${slideDistance}px), -50%)`;
 
       // Phase 2: After sliding out, reset position and slide in
@@ -174,17 +174,17 @@
         markSubtitle.offsetHeight;
 
         // Phase 3: Slide in from opposite sides to center
-        markContainer.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+        markContainer.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
         markContainer.style.transform = "translate(-50%, -50%)";
         
-        markSubtitle.style.transition = "transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)";
+        markSubtitle.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
         markSubtitle.style.transform = "translate(-50%, -50%)";
 
         // Reset animation state after animation completes
         setTimeout(() => {
           isAnimating = false;
-        }, 800);
-      }, 800);
+        }, 400);
+      }, 400);
     }
 
     markR.addEventListener("click", (e) => {
