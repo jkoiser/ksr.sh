@@ -169,6 +169,61 @@
 
     let isAnimating = false;
 
+    // Function to trigger initial slide-in animation (from bottom/top)
+    function animateSlideIn() {
+      if (isAnimating) {
+        console.log("Animation already in progress, skipping");
+        return;
+      }
+      isAnimating = true;
+      console.log("Starting slide-in animation");
+
+      // Disable transitions and set elements to off-screen positions immediately
+      markContainer.style.transition = "none";
+      markContainer.style.transform = "translate3d(-50%, calc(50vh + 150%), 0)"; // Bottom
+      markSubtitle.style.transition = "none";
+      markSubtitle.style.transform = "translate3d(-50%, calc(-50vh - 150%), 0)"; // Top
+
+      // Remove loaded classes
+      markContainer.classList.remove("mark--loaded");
+      markSubtitle.classList.remove("mark-subtitle--loaded");
+
+      // Force reflow to ensure the reset is applied
+      void markContainer.offsetHeight;
+      void markSubtitle.offsetHeight;
+
+      // Now enable transitions and trigger slide-in animation
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // Re-enable transitions
+          markContainer.style.transition = "";
+          markSubtitle.style.transition = "";
+          
+          // Clear inline transforms so CSS classes take over
+          markContainer.style.transform = "";
+          markSubtitle.style.transform = "";
+          
+          // Add loaded classes to trigger slide-in animation
+          markContainer.classList.add("mark--loaded");
+          markSubtitle.classList.add("mark-subtitle--loaded");
+          
+          console.log("Slide-in animation triggered");
+          
+          // Reset animation state after animation completes (750ms for 25% slower)
+          setTimeout(() => {
+            isAnimating = false;
+            console.log("Animation complete");
+          }, 750);
+        });
+      });
+    }
+
+    // Initial slide-in animation on page load
+    requestAnimationFrame(() => {
+      markContainer.classList.add("mark--loaded");
+      markSubtitle.classList.add("mark-subtitle--loaded");
+    });
+
     function animateSlide() {
       if (isAnimating) return;
       isAnimating = true;
@@ -183,20 +238,20 @@
 
       // Phase 1: Slide right and out (ksr), left and out (subtitle)
       markContainer.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-      markContainer.style.transform = `translate(calc(-50% + ${slideDistance}px), -50%)`;
+      markContainer.style.transform = `translate3d(calc(-50% + ${slideDistance}px), -50%, 0)`;
       
       markSubtitle.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-      markSubtitle.style.transform = `translate(calc(-50% - ${slideDistance}px), -50%)`;
+      markSubtitle.style.transform = `translate3d(calc(-50% - ${slideDistance}px), -50%, 0)`;
 
       // Phase 2: After sliding out, reset position and slide in
       setTimeout(() => {
         // Reset ksr to left side (off screen)
         markContainer.style.transition = "none";
-        markContainer.style.transform = `translate(calc(-50% - ${viewportWidth}px), -50%)`;
+        markContainer.style.transform = `translate3d(calc(-50% - ${viewportWidth}px), -50%, 0)`;
         
         // Reset subtitle to right side (off screen)
         markSubtitle.style.transition = "none";
-        markSubtitle.style.transform = `translate(calc(-50% + ${viewportWidth}px), -50%)`;
+        markSubtitle.style.transform = `translate3d(calc(-50% + ${viewportWidth}px), -50%, 0)`;
 
         // Force reflow
         markContainer.offsetHeight;
@@ -204,10 +259,10 @@
 
         // Phase 3: Slide in from opposite sides to center
         markContainer.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-        markContainer.style.transform = "translate(-50%, -50%)";
+        markContainer.style.transform = "translate3d(-50%, -50%, 0)";
         
         markSubtitle.style.transition = "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)";
-        markSubtitle.style.transform = "translate(-50%, -50%)";
+        markSubtitle.style.transform = "translate3d(-50%, -50%, 0)";
 
         // Reset animation state after animation completes
         setTimeout(() => {
@@ -222,6 +277,27 @@
       console.log("r clicked!");
       animateSlide();
     });
+
+    // Add click handler for "page" part of subtitle
+    // Wait a bit to ensure DOM is ready, then attach handler
+    setTimeout(() => {
+      const markPage = document.getElementById("markPage");
+      if (markPage) {
+        markPage.style.cursor = "pointer";
+        markPage.style.pointerEvents = "auto";
+        
+        markPage.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          console.log("page clicked - triggering slide-in animation!");
+          animateSlideIn();
+        });
+        
+        console.log("Click handler attached to 'page'");
+      } else {
+        console.error("markPage element not found!");
+      }
+    }, 50);
   }
 
   // Initialize - script is at bottom of body so DOM is ready

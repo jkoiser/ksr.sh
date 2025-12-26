@@ -83,7 +83,7 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, calc(50vh + 150%), 0); /* Start completely off-screen at bottom */
   z-index: 4;
   display: flex;
   gap: clamp(10px, 1.6vw, 18px);
@@ -93,6 +93,11 @@ body {
   will-change: transform;
   /* Enable hardware acceleration for Firefox */
   backface-visibility: hidden;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mark--loaded {
+  transform: translate3d(-50%, -50%, 0); /* Final position */
 }
 
 .mark span {
@@ -187,7 +192,7 @@ body {
   position: absolute;
   left: 50%;
   top: calc(50% + clamp(40px, 7vw, 80px));
-  transform: translate3d(-50%, -50%, 0);
+  transform: translate3d(-50%, calc(-50vh - 150%), 0); /* Start completely off-screen at top */
   z-index: 4;
   font-size: clamp(8.5px, 1.55vw, 18px);
   font-weight: 400;
@@ -200,10 +205,42 @@ body {
   will-change: transform;
   /* Enable hardware acceleration for Firefox */
   backface-visibility: hidden;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: auto;
   filter:
     drop-shadow(0 0 8px rgba(255, 255, 255, 0.25))
     drop-shadow(0 0 12px rgba(255, 255, 255, 0.15))
     drop-shadow(0 5px 15px rgba(0, 0, 0, 0.35));
+}
+
+.mark-subtitle--loaded {
+  transform: translate3d(-50%, -50%, 0); /* Final position */
+}
+
+.mark-subtitle a,
+.mark-subtitle__link {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.mark-subtitle a:hover,
+.mark-subtitle__link:hover {
+  opacity: 0.75;
+}
+
+.mark-subtitle__page {
+  cursor: pointer;
+  transition: opacity 0.2s;
+  pointer-events: auto;
+  position: relative;
+  z-index: 1;
+  text-decoration: none;
+  color: inherit;
+}
+
+.mark-subtitle__page:hover {
+  opacity: 0.75;
 }
 
 .mark span::after {
