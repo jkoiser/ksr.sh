@@ -35,8 +35,12 @@ body {
 }
 
 .crt {
-  /* Push everything into one “painted poster” plane */
+  /* Push everything into one "painted poster" plane */
+  /* Use transform3d to enable hardware acceleration in Firefox */
+  transform: translate3d(0, 0, 0);
   filter: saturate(1.35) contrast(1.08);
+  /* Optimize compositing for Firefox */
+  will-change: filter;
 }
 
 .crt::after {
@@ -48,6 +52,9 @@ body {
   z-index: 3;
   opacity: 0.35;
   mix-blend-mode: overlay;
+  /* Enable hardware acceleration for Firefox */
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
   background:
     radial-gradient(2px 2px at 10% 20%, rgba(255, 255, 255, 0.30), transparent 60%),
     radial-gradient(1px 1px at 70% 40%, rgba(255, 255, 255, 0.28), transparent 60%),
@@ -76,7 +83,7 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0);
   z-index: 4;
   display: flex;
   gap: clamp(10px, 1.6vw, 18px);
@@ -84,6 +91,8 @@ body {
   mix-blend-mode: screen;
   opacity: 0.96;
   will-change: transform;
+  /* Enable hardware acceleration for Firefox */
+  backface-visibility: hidden;
 }
 
 .mark span {
@@ -178,7 +187,7 @@ body {
   position: absolute;
   left: 50%;
   top: calc(50% + clamp(40px, 7vw, 80px));
-  transform: translate(-50%, -50%);
+  transform: translate3d(-50%, -50%, 0);
   z-index: 4;
   font-size: clamp(8.5px, 1.55vw, 18px);
   font-weight: 400;
@@ -189,6 +198,8 @@ body {
   mix-blend-mode: screen;
   opacity: 0.90;
   will-change: transform;
+  /* Enable hardware acceleration for Firefox */
+  backface-visibility: hidden;
   filter:
     drop-shadow(0 0 8px rgba(255, 255, 255, 0.25))
     drop-shadow(0 0 12px rgba(255, 255, 255, 0.15))
@@ -243,6 +254,9 @@ body {
   inset: 0;
   pointer-events: none;
   z-index: 2;
+  /* Enable hardware acceleration for Firefox */
+  transform: translate3d(0, 0, 0);
+  will-change: opacity;
   background:
     linear-gradient(
       to bottom,

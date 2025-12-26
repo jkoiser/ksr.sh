@@ -8,25 +8,34 @@
 
   // --- Painted haze + spray glitter canvas (ambient)
   function createPaint(canvas) {
+    // Detect Firefox for performance optimizations
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    
     const ctx = canvas.getContext("2d", { alpha: true });
     let w = 0;
     let h = 0;
     let p = [];
     let t = 0;
     let raf = 0;
+    let frameSkip = 0; // Frame skipping for Firefox
+    const fontCache = new Map(); // Cache font strings outside draw loop
 
     // Matrix characters pool
     const matrixChars = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲンABCDEFGHIJKLMNOPQRSTUVWXYZ";
     
     function resize() {
-      const dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      // Limit DPR for Firefox to improve performance
+      const maxDpr = isFirefox ? 1.5 : 2;
+      const dpr = Math.max(1, Math.min(maxDpr, window.devicePixelRatio || 1));
       w = Math.floor(window.innerWidth * dpr);
       h = Math.floor(window.innerHeight * dpr);
       canvas.width = w;
       canvas.height = h;
       canvas.style.width = "100%";
       canvas.style.height = "100%";
-      const count = Math.floor((w * h) / 52000);
+      // Reduce particle count for Firefox
+      const divisor = isFirefox ? 65000 : 52000;
+      const count = Math.floor((w * h) / divisor);
       p = new Array(count).fill(0).map(() => ({
         x: Math.random() * w,
         y: Math.random() * h,
@@ -40,6 +49,16 @@
 
     function draw() {
       t += 1;
+      
+      // Frame skipping for Firefox to improve performance
+      if (isFirefox) {
+        frameSkip++;
+        if (frameSkip % 2 === 0) {
+          raf = requestAnimationFrame(draw);
+          return;
+        }
+      }
+      
       ctx.clearRect(0, 0, w, h);
 
       // Soft painted wash (Matrix green tint)
@@ -51,8 +70,9 @@
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, w, h);
 
-      // Occasional "spray smears" (Matrix green)
-      if (t % 90 === 0) {
+      // Occasional "spray smears" (Matrix green) - less frequent in Firefox
+      const sprayInterval = isFirefox ? 120 : 90;
+      if (t % sprayInterval === 0) {
         const cx = Math.random() * w;
         const cy = Math.random() * h;
         const rx = 120 + Math.random() * 260;
@@ -72,7 +92,8 @@
         ctx.restore();
       }
 
-      // Set text alignment for Matrix characters
+      // Optimize text rendering for Firefox
+      // Batch similar operations and cache font
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
@@ -101,7 +122,15 @@
         const b = Math.floor(green * 0.25); // Slight blue tint
 
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
-        ctx.font = `${s.r * 2}px "Courier New", monospace`;
+        
+        // Cache font string to avoid repeated string operations
+        const fontSize = s.r * 2;
+        let fontStr = fontCache.get(fontSize);
+        if (!fontStr) {
+          fontStr = `${fontSize}px "Courier New", monospace`;
+          fontCache.set(fontSize, fontStr);
+        }
+        ctx.font = fontStr;
         ctx.fillText(s.char, s.x, s.y);
       }
       raf = requestAnimationFrame(draw);
