@@ -24,7 +24,7 @@
         display: block;
         max-width: 100%;
         max-height: 100%;
-        border: 1px solid rgba(0, 255, 65, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
         background: #000000;
       }
@@ -54,8 +54,8 @@
 
       .back-link:hover {
         color: rgba(255, 255, 255, 0.95);
-        border-color: rgba(0, 255, 65, 0.3);
-        box-shadow: 0 0 15px rgba(0, 255, 65, 0.15);
+        border-color: rgba(255, 255, 255, 0.3);
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.15);
       }
 
       .score {
@@ -69,7 +69,7 @@
         padding: 8px 14px;
         background: rgba(0, 0, 0, 0.3);
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(0, 255, 65, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 8px;
       }
 
@@ -87,13 +87,13 @@
         padding: 4px 10px;
         background: rgba(0, 0, 0, 0.25);
         backdrop-filter: blur(8px);
-        border: 1px solid rgba(0, 255, 65, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 6px;
       }
 
       .highscore-item:first-child {
         color: rgba(255, 255, 255, 0.85);
-        border-color: rgba(0, 255, 65, 0.25);
+        border-color: rgba(255, 255, 255, 0.25);
       }
 
       .game-over {
@@ -112,16 +112,16 @@
 
       .game-over-box {
         background:
-          radial-gradient(400px 200px at 30% 20%, rgba(0, 255, 65, 0.08), transparent 60%),
-          radial-gradient(400px 200px at 70% 40%, rgba(0, 204, 51, 0.06), transparent 60%),
+          radial-gradient(400px 200px at 30% 20%, rgba(255, 255, 255, 0.10), transparent 60%),
+          radial-gradient(400px 200px at 70% 40%, rgba(200, 200, 200, 0.08), transparent 60%),
           rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(0, 255, 65, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 20px;
         padding: 40px;
         box-shadow:
           0 0 60px rgba(0, 0, 0, 0.8),
-          inset 0 0 0 1px rgba(0, 255, 65, 0.06);
+          inset 0 0 0 1px rgba(255, 255, 255, 0.08);
       }
 
       .game-over-title {
@@ -173,8 +173,6 @@
   </head>
   <body>
     <div class="crt">
-      <canvas id="stars" class="stars" width="1" height="1" aria-hidden="true"></canvas>
-
       <div class="game-container">
         <div class="game-ui">
           <a href="../" class="back-link">←</a>
@@ -546,16 +544,16 @@
         // Matrix green/black background (above floor)
         const bgGrad = ctx.createLinearGradient(0, 0, 0, floorY);
         bgGrad.addColorStop(0, "#000000");
-        bgGrad.addColorStop(0.5, "#001100");
+        bgGrad.addColorStop(0.5, "#0a0a0a");
         bgGrad.addColorStop(1, "#000000");
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, canvas.width, floorY);
         
         // Subtle Matrix green tint overlay
         const greenOverlay = ctx.createLinearGradient(0, 0, canvas.width, floorY);
-        greenOverlay.addColorStop(0, "rgba(0, 255, 65, 0.02)");
-        greenOverlay.addColorStop(0.5, "rgba(0, 204, 51, 0.015)");
-        greenOverlay.addColorStop(1, "rgba(0, 255, 65, 0.02)");
+        greenOverlay.addColorStop(0, "rgba(150, 150, 150, 0.02)");
+        greenOverlay.addColorStop(0.5, "rgba(150, 150, 150, 0.015)");
+        greenOverlay.addColorStop(1, "rgba(150, 150, 150, 0.02)");
         ctx.fillStyle = greenOverlay;
         ctx.fillRect(0, 0, canvas.width, floorY);
       }
