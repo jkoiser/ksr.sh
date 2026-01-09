@@ -108,6 +108,7 @@ body {
   transform: translate3d(-50%, -50%, 0); /* Static centered position */
   z-index: 4;
   display: flex;
+  align-items: center;
   gap: clamp(10px, 1.6vw, 18px);
   user-select: none;
   mix-blend-mode: screen;
@@ -180,6 +181,24 @@ body {
 }
 .mark__r { 
   color: rgba(255, 255, 255, 0.95);
+  filter:
+    drop-shadow(0 0 18px rgba(255, 255, 255, 0.35))
+    drop-shadow(0 0 22px rgba(255, 255, 255, 0.25))
+    drop-shadow(0 10px 30px rgba(0, 0, 0, 0.45));
+}
+
+.mark .mark__small {
+  position: relative;
+  display: block;
+  font-weight: 900;
+  font-size: clamp(13.53px, 2.4552vw, 28.38px) !important;
+  letter-spacing: 0.5px;
+  text-transform: lowercase;
+  color: rgba(255, 255, 255, 0.95);
+  align-self: center;
+  line-height: 1;
+  margin-left: clamp(-6px, -1vw, -10px);
+  margin-right: clamp(-6px, -1vw, -10px);
   filter:
     drop-shadow(0 0 18px rgba(255, 255, 255, 0.35))
     drop-shadow(0 0 22px rgba(255, 255, 255, 0.25))
