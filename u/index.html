@@ -107,25 +107,70 @@
       }
 
 
-      .converter-output {
+      .converter-output-wrapper {
         margin-top: 20px;
+        position: relative;
+      }
+
+      .converter-output {
         padding: 16px;
+        padding-right: 80px;
         background: rgba(0, 0, 0, 0.35);
         border: 1px solid rgba(255, 255, 255, 0.18);
         border-radius: 12px;
         font-family: "Courier New", Courier, monospace;
         font-size: 14px;
         color: rgba(255, 255, 255, 0.95);
-        min-height: 24px;
+        height: 50px;
         word-break: break-all;
         text-shadow: 
           0 0 12px rgba(255, 255, 255, 0.20),
           0 0 18px rgba(255, 255, 255, 0.15);
+        display: flex;
+        align-items: center;
       }
 
       .converter-output.error {
         color: rgba(255, 100, 100, 0.95);
         text-shadow: 0 0 12px rgba(255, 100, 100, 0.30);
+      }
+
+      .converter-output-buttons {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        display: flex;
+        gap: 6px;
+      }
+
+      .converter-btn {
+        padding: 6px 10px;
+        background: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 11px;
+        font-family: "Courier New", Courier, monospace;
+        cursor: pointer;
+        transition: all 0.2s;
+        letter-spacing: 0.5px;
+        text-transform: lowercase;
+      }
+
+      .converter-btn:hover {
+        background: rgba(0, 0, 0, 0.7);
+        border-color: rgba(255, 255, 255, 0.35);
+        color: rgba(255, 255, 255, 0.95);
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.15);
+      }
+
+      .converter-btn:active {
+        transform: scale(0.95);
+      }
+
+      .converter-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
       }
 
       .converter-divider {
@@ -187,7 +232,13 @@
               placeholder="e.g. 1734567890"
               autocomplete="off"
             />
-            <div id="unix-output" class="converter-output"></div>
+            <div class="converter-output-wrapper">
+              <div id="unix-output" class="converter-output"></div>
+              <div class="converter-output-buttons">
+                <button class="converter-btn" id="unix-copy-btn" title="Copy">copy</button>
+                <button class="converter-btn" id="unix-clear-btn" title="Clear">clear</button>
+              </div>
+            </div>
           </div>
 
           <div class="converter-divider"></div>
@@ -201,7 +252,13 @@
               placeholder="e.g. 2024-12-19 12:34:56 or Dec 19, 2024"
               autocomplete="off"
             />
-            <div id="date-output" class="converter-output"></div>
+            <div class="converter-output-wrapper">
+              <div id="date-output" class="converter-output"></div>
+              <div class="converter-output-buttons">
+                <button class="converter-btn" id="date-copy-btn" title="Copy">copy</button>
+                <button class="converter-btn" id="date-clear-btn" title="Clear">clear</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -297,6 +354,71 @@
         clearTimeout(dateTimeout);
         dateTimeout = setTimeout(convertFromDate, 500);
       });
+
+      // Copy and clear functionality
+      function copyToClipboard(text) {
+        if (!text) return;
+        navigator.clipboard.writeText(text).then(() => {
+          // Visual feedback could be added here if needed
+        }).catch(err => {
+          console.error("Failed to copy:", err);
+        });
+      }
+
+      function clearUnix() {
+        document.getElementById("unix-input").value = "";
+        document.getElementById("unix-output").textContent = "";
+        document.getElementById("unix-output").classList.remove("error");
+      }
+
+      function clearDate() {
+        document.getElementById("date-input").value = "";
+        document.getElementById("date-output").textContent = "";
+        document.getElementById("date-output").classList.remove("error");
+      }
+
+      // Unix copy and clear buttons
+      document.getElementById("unix-copy-btn").addEventListener("click", () => {
+        const output = document.getElementById("unix-output");
+        const text = output.textContent.trim();
+        if (text && !output.classList.contains("error")) {
+          copyToClipboard(text);
+        }
+      });
+
+      document.getElementById("unix-clear-btn").addEventListener("click", () => {
+        clearUnix();
+      });
+
+      // Date copy and clear buttons
+      document.getElementById("date-copy-btn").addEventListener("click", () => {
+        const output = document.getElementById("date-output");
+        const text = output.textContent.trim();
+        if (text && !output.classList.contains("error")) {
+          copyToClipboard(text);
+        }
+      });
+
+      document.getElementById("date-clear-btn").addEventListener("click", () => {
+        clearDate();
+      });
+
+      // Prefill date input with current date/time on page load
+      function formatCurrentDate() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      }
+
+      // Initialize with current date
+      const dateInput = document.getElementById("date-input");
+      dateInput.value = formatCurrentDate();
+      convertFromDate();
     </script>
   </body>
 </html>
